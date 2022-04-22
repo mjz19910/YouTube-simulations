@@ -425,12 +425,26 @@ void draw_config(int color[NPARTMAX], double *configs[NPARTMAX], int active[NPAR
         draw_billiard();
 }
 
+#include <time.h>
+time_t start_time;
+int time_init = 0;
+
+time_t r_time(time_t* a) {
+    return time(a);
+}
+
 void graph_movie(int time, int color[NPARTMAX], double *configs[NPARTMAX], int active[NPARTMAX])
 /* compute next movie frame */
 {
     int i, j, k, c;
     double rgb[3];
     static double total_pathlength = 0.0;
+    if(!time_init) {
+        r_time(&start_time);
+        time_init = 1;
+    }
+
+    printf("Graph time: %ld\n", r_time(NULL) - start_time);
 
     for (j = 0; j < time; j++)
     {
