@@ -90,7 +90,7 @@
 #define LMAX 0.01       /* minimal segment length triggering resampling */
 #define DMIN 0.02       /* minimal distance to boundary for triggering resampling */
 #define CYCLE 1         /* set to 1 for closed curve (start in all directions) */
-#define SHOWTRAILS 0    /* set to 1 to keep trails of the particles */
+#define SHOWTRAILS 0   /* set to 1 to keep trails of the particles */
 #define TEST_ACTIVE 0   /* set to 1 to test whether particle is in billiard */
 
 #define NSTEPS 10400 /* number of frames of movie */
