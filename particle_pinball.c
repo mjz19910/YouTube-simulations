@@ -515,7 +515,7 @@ void graph_movie(int time, int color[NPARTMAX], double *configs[NPARTMAX], int a
         }
     }
 
-    //     draw_config(color, configs);
+    // draw_config(color, configs);
 }
 
 void print_particle_numbers(double *configs[NPARTMAX])
