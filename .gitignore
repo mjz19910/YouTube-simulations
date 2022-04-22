@@ -4,3 +4,9 @@ production/
 tif_drop/
 *.mp4
 **/*.mp4
+particle_billiard
+lennardjones
+drop_billiard
+wave_billiard
+wave_left.dat
+wave_right.dat
