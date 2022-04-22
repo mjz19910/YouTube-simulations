@@ -1,7 +1,6 @@
 /*********************/
 /* Graphics routines */
 /*********************/
-
 #include "colors_waves.c"
 
 // #define HUE_TYPE0 260.0     /* hue of particles of type 0 */
