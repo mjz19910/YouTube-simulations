@@ -212,8 +212,8 @@ void init_gaussian(double x, double y, double mean, double amplitude, double sca
             } /* boundary temperatures */
             else if (in >= 2)
                 phi[i][j] = T_IN * pow(0.75, (double)(in - 2));
-            //             else if (in >= 2) phi[i][j] = T_IN*pow(1.0 - 0.5*(double)(in-2), (double)(in-2));
-            //             else if (in >= 2) phi[i][j] = T_IN*(1.0 - (double)(in-2)/((double)MDEPTH))*(1.0 - (double)(in-2)/((double)MDEPTH));
+            // phi[i][j] = T_IN * pow(1.0 - 0.5 * (double)(in - 2), (double)(in - 2));
+            // phi[i][j] = T_IN * (1.0 - (double)(in - 2) / ((double)MDEPTH)) * (1.0 - (double)(in - 2) / ((double)MDEPTH));
             else
                 phi[i][j] = T_OUT;
         }
