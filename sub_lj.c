@@ -1,7 +1,11 @@
 /*********************/
 /* Graphics routines */
 /*********************/
+#include <GL/glut.h>
+#include <math.h>
+#include "tiffio.h"
 #include "colors_waves.c"
+#define PI M_PI
 
 // #define HUE_TYPE0 260.0     /* hue of particles of type 0 */
 // #define HUE_TYPE0 300.0     /* hue of particles of type 0 */
@@ -454,6 +458,7 @@ void init_particle_config(t_particle particles[NMAXCIRCLES])
 /* initialise particle configuration */
 {
     int i, j, k, n, ncirc0, n_p_active, ncandidates = PDISC_CANDIDATES, naccepted;
+    int ncircles;
     double dx, dy, p, phi, r, r0, ra[5], sa[5], height, x, y = 0.0, gamma, dpoisson = PDISC_DISTANCE * MU, xx[4], yy[4];
     short int active_poisson[NMAXCIRCLES], far;
 
