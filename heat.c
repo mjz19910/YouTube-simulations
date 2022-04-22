@@ -32,20 +32,20 @@
 #include <GL/glu.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <tiffio.h>     /* Sam Leffler's libtiff library. */
+#include <tiffio.h> /* Sam Leffler's libtiff library. */
 #include <omp.h>
 
-#define MOVIE 0         /* set to 1 to generate movie */
+#define MOVIE 0 /* set to 1 to generate movie */
 
 /* General geometrical parameters */
 
 // #define WINWIDTH 	1280  /* window width */
-#define WINWIDTH 	720  /* window width */
-#define WINHEIGHT 	720   /* window height */
+#define WINWIDTH 720  /* window width */
+#define WINHEIGHT 720 /* window height */
 
 // #define NX 1280          /* number of grid points on x axis */
-#define NX 720          /* number of grid points on x axis */
-#define NY 720          /* number of grid points on y axis */
+#define NX 720 /* number of grid points on x axis */
+#define NY 720 /* number of grid points on y axis */
 // #define NX 640          /* number of grid points on x axis */
 // #define NY 360          /* number of grid points on y axis */
 
@@ -55,44 +55,44 @@
 // #define XMIN -2.0
 // #define XMAX 2.0	/* x interval */
 #define XMIN -1.125
-#define XMAX 1.125	/* x interval */
+#define XMAX 1.125 /* x interval */
 #define YMIN -1.125
-#define YMAX 1.125	/* y interval for 9/16 aspect ratio */
+#define YMAX 1.125 /* y interval for 9/16 aspect ratio */
 
 #define JULIA_SCALE 0.5 /* scaling for Julia sets */
 
 /* Choice of the billiard table */
 
-#define B_DOMAIN 27      /* choice of domain shape, see list in global_pdes.c  */
+#define B_DOMAIN 27 /* choice of domain shape, see list in global_pdes.c  */
 
-#define CIRCLE_PATTERN 0    /* pattern of circles, see list in global_pdes.c */
+#define CIRCLE_PATTERN 0 /* pattern of circles, see list in global_pdes.c */
 
 #define P_PERCOL 0.25       /* probability of having a circle in C_RAND_PERCOL arrangement */
 #define NPOISSON 300        /* number of points for Poisson C_RAND_POISSON arrangement */
 #define RANDOM_POLY_ANGLE 0 /* set to 1 to randomize angle of polygons */
 
-#define LAMBDA 1.1	    /* parameter controlling the dimensions of domain */
-#define MU 0.8	            /* parameter controlling the dimensions of domain */
-#define NPOLY 6             /* number of sides of polygon */
-#define APOLY 1.0           /* angle by which to turn polygon, in units of Pi/2 */
-#define MDEPTH 6            /* depth of computation of Menger gasket */
-#define MRATIO 5            /* ratio defining Menger gasket */
-#define MANDELLEVEL 1000      /* iteration level for Mandelbrot set */
-#define MANDELLIMIT 10.0     /* limit value for approximation of Mandelbrot set */
-#define FOCI 1              /* set to 1 to draw focal points of ellipse */
-#define NGRIDX 15            /* number of grid point for grid of disks */
-#define NGRIDY 20           /* number of grid point for grid of disks */
+#define LAMBDA 1.1       /* parameter controlling the dimensions of domain */
+#define MU 0.8           /* parameter controlling the dimensions of domain */
+#define NPOLY 6          /* number of sides of polygon */
+#define APOLY 1.0        /* angle by which to turn polygon, in units of Pi/2 */
+#define MDEPTH 6         /* depth of computation of Menger gasket */
+#define MRATIO 5         /* ratio defining Menger gasket */
+#define MANDELLEVEL 1000 /* iteration level for Mandelbrot set */
+#define MANDELLIMIT 10.0 /* limit value for approximation of Mandelbrot set */
+#define FOCI 1           /* set to 1 to draw focal points of ellipse */
+#define NGRIDX 15        /* number of grid point for grid of disks */
+#define NGRIDY 20        /* number of grid point for grid of disks */
 
 #define X_SHOOTER -0.2
 #define Y_SHOOTER -0.6
 #define X_TARGET 0.4
-#define Y_TARGET 0.7        /* shooter and target positions in laser fight */
+#define Y_TARGET 0.7 /* shooter and target positions in laser fight */
 
-#define ISO_XSHIFT_LEFT -1.65  
+#define ISO_XSHIFT_LEFT -1.65
 #define ISO_XSHIFT_RIGHT 0.4
 #define ISO_YSHIFT_LEFT -0.05
-#define ISO_YSHIFT_RIGHT -0.05 
-#define ISO_SCALE 0.85           /* coordinates for isospectral billiards */
+#define ISO_YSHIFT_RIGHT -0.05
+#define ISO_SCALE 0.85 /* coordinates for isospectral billiards */
 
 /* You can add more billiard tables by adapting the functions */
 /* xy_in_billiard and draw_billiard in sub_wave.c */
@@ -105,11 +105,11 @@
 // #define DT 0.00000002
 // #define DT 0.000000005
 #define VISCOSITY 10.0
-#define T_OUT 2.0       /* outside temperature */
-#define T_IN 0.0        /* inside temperature */
+#define T_OUT 2.0 /* outside temperature */
+#define T_IN 0.0  /* inside temperature */
 // #define T_OUT 0.0       /* outside temperature */
 // #define T_IN 2.0        /* inside temperature */
-#define SPEED 0.0       /* speed of drift to the right */
+#define SPEED 0.0 /* speed of drift to the right */
 
 /* Boundary conditions, see list in global_pdes.c  */
 
@@ -117,207 +117,221 @@
 
 /* Parameters for length and speed of simulation */
 
-#define NSTEPS 1200      /* number of frames of movie */
-#define NVID 30          /* number of iterations between images displayed on screen */
+#define NSTEPS 1200 /* number of frames of movie */
+#define NVID 30     /* number of iterations between images displayed on screen */
 // #define NVID 100          /* number of iterations between images displayed on screen */
 #define NSEG 100         /* number of segments of boundary */
-#define BOUNDARY_WIDTH 1    /* width of billiard boundary */
-#define DRAW_BILLIARD 0     /* set to 1 to draw billiard boundary */
+#define BOUNDARY_WIDTH 1 /* width of billiard boundary */
+#define DRAW_BILLIARD 0  /* set to 1 to draw billiard boundary */
 
-#define PAUSE 100       /* number of frames after which to pause */
-#define PSLEEP 1         /* sleep time during pause */
-#define SLEEP1  2        /* initial sleeping time */
-#define SLEEP2  1        /* final sleeping time */
+#define PAUSE 100 /* number of frames after which to pause */
+#define PSLEEP 1  /* sleep time during pause */
+#define SLEEP1 2  /* initial sleeping time */
+#define SLEEP2 1  /* final sleeping time */
 
 /* For debugging purposes only */
-#define FLOOR 0         /* set to 1 to limit wave amplitude to VMAX */
-#define VMAX 10.0       /* max value of wave amplitude */
+#define FLOOR 0   /* set to 1 to limit wave amplitude to VMAX */
+#define VMAX 10.0 /* max value of wave amplitude */
 
 /* Field representation */
 
 #define FIELD_REP 0
 
-#define F_INTENSITY 0   /* color represents intensity */
-#define F_GRADIENT 1    /* color represents norm of gradient */ 
+#define F_INTENSITY 0 /* color represents intensity */
+#define F_GRADIENT 1  /* color represents norm of gradient */
 
-#define DRAW_FIELD_LINES 0  /* set to 1 to draw field lines */
-#define FIELD_LINE_WIDTH 1  /* width of field lines */
-#define N_FIELD_LINES 120   /* number of field lines */
+#define DRAW_FIELD_LINES 0    /* set to 1 to draw field lines */
+#define FIELD_LINE_WIDTH 1    /* width of field lines */
+#define N_FIELD_LINES 120     /* number of field lines */
 #define FIELD_LINE_FACTOR 120 /* factor controlling precision when computing origin of field lines */
 
 /* Color schemes, see list in global_pdes.c  */
 
-#define COLOR_PALETTE 10     /* Color palette, see list in global_pdes.c  */
+#define COLOR_PALETTE 10 /* Color palette, see list in global_pdes.c  */
 
-#define BLACK 1          /* black background */
+#define BLACK 1 /* black background */
 
-#define COLOR_SCHEME 1   /* choice of color scheme */
+#define COLOR_SCHEME 1 /* choice of color scheme */
 
-#define SCALE 0          /* set to 1 to adjust color scheme to variance of field */
+#define SCALE 0 /* set to 1 to adjust color scheme to variance of field */
 // #define SLOPE 0.1        /* sensitivity of color on wave amplitude */
-#define SLOPE 0.2        /* sensitivity of color on wave amplitude */
-#define ATTENUATION 0.0  /* exponential attenuation coefficient of contrast with time */
+#define SLOPE 0.2       /* sensitivity of color on wave amplitude */
+#define ATTENUATION 0.0 /* exponential attenuation coefficient of contrast with time */
 
-#define COLORHUE 260     /* initial hue of water color for scheme C_LUM */
-#define COLORDRIFT 0.0   /* how much the color hue drifts during the whole simulation */
-#define LUMMEAN 0.5      /* amplitude of luminosity variation for scheme C_LUM */
-#define LUMAMP 0.3       /* amplitude of luminosity variation for scheme C_LUM */
+#define COLORHUE 260   /* initial hue of water color for scheme C_LUM */
+#define COLORDRIFT 0.0 /* how much the color hue drifts during the whole simulation */
+#define LUMMEAN 0.5    /* amplitude of luminosity variation for scheme C_LUM */
+#define LUMAMP 0.3     /* amplitude of luminosity variation for scheme C_LUM */
 // #define HUEMEAN 180.0    /* mean value of hue for color scheme C_HUE */
 // #define HUEAMP -180.0      /* amplitude of variation of hue for color scheme C_HUE */
-#define HUEMEAN 359.0    /* mean value of hue for color scheme C_HUE */
-#define HUEAMP -359.0      /* amplitude of variation of hue for color scheme C_HUE */
+#define HUEMEAN 359.0 /* mean value of hue for color scheme C_HUE */
+#define HUEAMP -359.0 /* amplitude of variation of hue for color scheme C_HUE */
 // #define HUEMEAN 270.0    /* mean value of hue for color scheme C_HUE */
 // #define HUEAMP -130.0      /* amplitude of variation of hue for color scheme C_HUE */
-#define E_SCALE 100.0     /* scaling factor for energy representation */
-#define LOG_SCALE 1.0     /* scaling factor for energy log representation */
-#define LOG_SHIFT 0.0   
+#define E_SCALE 100.0 /* scaling factor for energy representation */
+#define LOG_SCALE 1.0 /* scaling factor for energy log representation */
+#define LOG_SHIFT 0.0
 
-#define DRAW_COLOR_SCHEME 1     /* set to 1 to plot the color scheme */
+#define DRAW_COLOR_SCHEME 1   /* set to 1 to plot the color scheme */
 #define COLORBAR_RANGE 2.0    /* scale of color scheme bar */
-#define COLORBAR_RANGE_B 12.0    /* scale of color scheme bar for 2nd part */
-#define ROTATE_COLOR_SCHEME 1   /* set to 1 to draw color scheme horizontally */
+#define COLORBAR_RANGE_B 12.0 /* scale of color scheme bar for 2nd part */
+#define ROTATE_COLOR_SCHEME 1 /* set to 1 to draw color scheme horizontally */
 
 #include "global_pdes.c"
 #include "sub_wave.c"
 
+double courant2; /* Courant parameter squared */
+double dx2;      /* spatial step size squared */
+double intstep;  /* integration step */
+double intstep1; /* integration step used in absorbing boundary conditions */
 
-double courant2;  /* Courant parameter squared */
-double dx2;       /* spatial step size squared */
-double intstep;   /* integration step */
-double intstep1;  /* integration step used in absorbing boundary conditions */
-
-
-
-void init_gaussian(double x, double y, double mean, double amplitude, double scalex, 
-                   double *phi[NX], short int * xy_in[NX])
+void init_gaussian(double x, double y, double mean, double amplitude, double scalex,
+                   double *phi[NX], short int *xy_in[NX])
 /* initialise field with gaussian at position (x,y) */
 {
     int i, j, in;
-    double xy[2], dist2, module, phase, scale2;    
+    double xy[2], dist2, module, phase, scale2;
 
-    scale2 = scalex*scalex;
+    scale2 = scalex * scalex;
     printf("Initialising field\n");
-    for (i=0; i<NX; i++)
-        for (j=0; j<NY; j++)
+    for (i = 0; i < NX; i++)
+        for (j = 0; j < NY; j++)
         {
             ij_to_xy(i, j, xy);
-	    xy_in[i][j] = xy_in_billiard(xy[0],xy[1]);
+            xy_in[i][j] = xy_in_billiard(xy[0], xy[1]);
 
             in = xy_in[i][j];
             if (in == 1)
             {
-                dist2 = (xy[0]-x)*(xy[0]-x) + (xy[1]-y)*(xy[1]-y);
-                module = amplitude*exp(-dist2/scale2);
-                if (module < 1.0e-15) module = 1.0e-15;
+                dist2 = (xy[0] - x) * (xy[0] - x) + (xy[1] - y) * (xy[1] - y);
+                module = amplitude * exp(-dist2 / scale2);
+                if (module < 1.0e-15)
+                    module = 1.0e-15;
 
-                phi[i][j] = mean + module/scalex;
-            }   /* boundary temperatures */
-            else if (in >= 2) phi[i][j] = T_IN*pow(0.75, (double)(in-2));
-//             else if (in >= 2) phi[i][j] = T_IN*pow(1.0 - 0.5*(double)(in-2), (double)(in-2));
-//             else if (in >= 2) phi[i][j] = T_IN*(1.0 - (double)(in-2)/((double)MDEPTH))*(1.0 - (double)(in-2)/((double)MDEPTH));
-            else phi[i][j] = T_OUT;
+                phi[i][j] = mean + module / scalex;
+            } /* boundary temperatures */
+            else if (in >= 2)
+                phi[i][j] = T_IN * pow(0.75, (double)(in - 2));
+            //             else if (in >= 2) phi[i][j] = T_IN*pow(1.0 - 0.5*(double)(in-2), (double)(in-2));
+            //             else if (in >= 2) phi[i][j] = T_IN*(1.0 - (double)(in-2)/((double)MDEPTH))*(1.0 - (double)(in-2)/((double)MDEPTH));
+            else
+                phi[i][j] = T_OUT;
         }
 }
 
-void init_julia_set(double *phi[NX], short int * xy_in[NX])
+void init_julia_set(double *phi[NX], short int *xy_in[NX])
 /* change Julia set boundary condition */
 {
     int i, j, in;
-    double xy[2], dist2, module, phase, scale2;    
+    double xy[2], dist2, module, phase, scale2;
 
-//     printf("Changing Julia set\n");
-    for (i=0; i<NX; i++)
-        for (j=0; j<NY; j++)
+    //     printf("Changing Julia set\n");
+    for (i = 0; i < NX; i++)
+        for (j = 0; j < NY; j++)
         {
             ij_to_xy(i, j, xy);
-	    xy_in[i][j] = xy_in_billiard(xy[0],xy[1]);
+            xy_in[i][j] = xy_in_billiard(xy[0], xy[1]);
 
             in = xy_in[i][j];
-            if (in >= 2) phi[i][j] = T_IN;
+            if (in >= 2)
+                phi[i][j] = T_IN;
         }
 }
-
 
 /*********************/
 /* animation part    */
 /*********************/
 
-
 void compute_gradient(double *phi[NX], double *nablax[NX], double *nablay[NX])
 /* compute the gradient of the field */
 {
-    int i, j, iplus, iminus, jplus, jminus; 
+    int i, j, iplus, iminus, jplus, jminus;
     double dx;
-    
-    dx = (XMAX-XMIN)/((double)NX);
-    
-    for (i=0; i<NX; i++)
-        for (j=0; j<NY; j++)
+
+    dx = (XMAX - XMIN) / ((double)NX);
+
+    for (i = 0; i < NX; i++)
+        for (j = 0; j < NY; j++)
         {
-            iplus = i+1;  if (iplus == NX) iplus = NX-1;
-            iminus = i-1; if (iminus == -1) iminus = 0;
-            jplus = j+1;  if (jplus == NX) jplus = NY-1;
-            jminus = j-1; if (jminus == -1) jminus = 0;
-            nablax[i][j] = (phi[iplus][j] - phi[iminus][j])/dx;
-            nablay[i][j] = (phi[i][jplus] - phi[i][jminus])/dx;
+            iplus = i + 1;
+            if (iplus == NX)
+                iplus = NX - 1;
+            iminus = i - 1;
+            if (iminus == -1)
+                iminus = 0;
+            jplus = j + 1;
+            if (jplus == NX)
+                jplus = NY - 1;
+            jminus = j - 1;
+            if (jminus == -1)
+                jminus = 0;
+            nablax[i][j] = (phi[iplus][j] - phi[iminus][j]) / dx;
+            nablay[i][j] = (phi[i][jplus] - phi[i][jminus]) / dx;
         }
 }
 
-void draw_field_line(double x, double y, short int *xy_in[NX], double *nablax[NX], 
+void draw_field_line(double x, double y, short int *xy_in[NX], double *nablax[NX],
                      double *nablay[NX], double delta, int nsteps)
 /* draw a field line of the gradient, starting in (x,y) */
 {
     double x1, y1, x2, y2, pos[2], nabx, naby, norm2, norm;
     int i = 0, ij[2], cont = 1;
-    
+
     glColor3f(1.0, 1.0, 1.0);
-//     glColor3f(0.0, 0.0, 0.0);
+    //     glColor3f(0.0, 0.0, 0.0);
     glLineWidth(FIELD_LINE_WIDTH);
     x1 = x;
     y1 = y;
-    
-//     printf("Drawing field line \n");
+
+    //     printf("Drawing field line \n");
 
     glEnable(GL_LINE_SMOOTH);
     glBegin(GL_LINE_STRIP);
     xy_to_pos(x1, y1, pos);
     glVertex2d(pos[0], pos[1]);
-    
+
     i = 0;
-    while ((cont)&&(i < nsteps))
+    while ((cont) && (i < nsteps))
     {
         xy_to_ij(x1, y1, ij);
-        
-        if (ij[0] < 0) ij[0] = 0;
-        if (ij[0] > NX-1) ij[0] = NX-1;
-        if (ij[1] < 0) ij[1] = 0;
-        if (ij[1] > NY-1) ij[1] = NY-1;
-        
+
+        if (ij[0] < 0)
+            ij[0] = 0;
+        if (ij[0] > NX - 1)
+            ij[0] = NX - 1;
+        if (ij[1] < 0)
+            ij[1] = 0;
+        if (ij[1] > NY - 1)
+            ij[1] = NY - 1;
+
         nabx = nablax[ij[0]][ij[1]];
         naby = nablay[ij[0]][ij[1]];
-        
-        norm2 = nabx*nabx + naby*naby;
-        
+
+        norm2 = nabx * nabx + naby * naby;
+
         if (norm2 > 1.0e-14)
         {
             /* avoid too large step size */
-            if (norm2 < 1.0e-9) norm2 = 1.0e-9;
+            if (norm2 < 1.0e-9)
+                norm2 = 1.0e-9;
             norm = sqrt(norm2);
-            x1 = x1 + delta*nabx/norm;
-            y1 = y1 + delta*naby/norm;
+            x1 = x1 + delta * nabx / norm;
+            y1 = y1 + delta * naby / norm;
         }
-        else cont = 0;
-        
-        if (!xy_in[ij[0]][ij[1]]) cont = 0;
-        
+        else
+            cont = 0;
+
+        if (!xy_in[ij[0]][ij[1]])
+            cont = 0;
+
         /* stop if the boundary is hit */
-//         if (xy_in[ij[0]][ij[1]] != 1) cont = 0;
-        
-//         printf("x1 = %.3lg \t y1 = %.3lg \n", x1, y1);
-                
+        //         if (xy_in[ij[0]][ij[1]] != 1) cont = 0;
+
+        //         printf("x1 = %.3lg \t y1 = %.3lg \n", x1, y1);
+
         xy_to_pos(x1, y1, pos);
         glVertex2d(pos[0], pos[1]);
-        
+
         i++;
     }
     glEnd();
@@ -330,188 +344,204 @@ void draw_wave(double *phi[NX], short int *xy_in[NX], double scale, int time)
     static int first = 1;
     double rgb[3], xy[2], x1, y1, x2, y2, dx, value, angle, dangle, intens, deltaintens, sum = 0.0;
     double *nablax[NX], *nablay[NX];
-    static double linex[N_FIELD_LINES*FIELD_LINE_FACTOR], liney[N_FIELD_LINES*FIELD_LINE_FACTOR], distance[N_FIELD_LINES*FIELD_LINE_FACTOR], integral[N_FIELD_LINES*FIELD_LINE_FACTOR + 1];
+    static double linex[N_FIELD_LINES * FIELD_LINE_FACTOR], liney[N_FIELD_LINES * FIELD_LINE_FACTOR], distance[N_FIELD_LINES * FIELD_LINE_FACTOR], integral[N_FIELD_LINES * FIELD_LINE_FACTOR + 1];
 
-    for (i=0; i<NX; i++) 
+    for (i = 0; i < NX; i++)
     {
-        nablax[i] = (double *)malloc(NY*sizeof(double));
-        nablay[i] = (double *)malloc(NY*sizeof(double));
+        nablax[i] = (double *)malloc(NY * sizeof(double));
+        nablay[i] = (double *)malloc(NY * sizeof(double));
     }
-    
+
     /* compute the gradient */
     compute_gradient(phi, nablax, nablay);
-    
+
     /* compute the position of origins of field lines */
-    if ((first)&&(DRAW_FIELD_LINES))
+    if ((first) && (DRAW_FIELD_LINES))
     {
         first = 0;
-        
+
         printf("computing linex\n");
-        
-//         x1 = LAMBDA + MU*1.01;
-//         y1 = 1.0;
-        x1 = 0.99*LAMBDA;
+
+        //         x1 = LAMBDA + MU*1.01;
+        //         y1 = 1.0;
+        x1 = 0.99 * LAMBDA;
         y1 = 0.0;
         linex[0] = x1;
         liney[0] = y1;
-        dangle = DPI/((double)(N_FIELD_LINES*FIELD_LINE_FACTOR));
-            
-        for (i = 1; i < N_FIELD_LINES*FIELD_LINE_FACTOR; i++)
+        dangle = DPI / ((double)(N_FIELD_LINES * FIELD_LINE_FACTOR));
+
+        for (i = 1; i < N_FIELD_LINES * FIELD_LINE_FACTOR; i++)
         {
-            angle = (double)i*dangle;
-//             x2 = LAMBDA + MU*1.01*cos(angle);
-//             y2 = 0.5 + MU*1.01*sin(angle);
-            x2 = 0.99*LAMBDA*cos(angle);
-            y2 = 0.99*LAMBDA*sin(angle);
+            angle = (double)i * dangle;
+            //             x2 = LAMBDA + MU*1.01*cos(angle);
+            //             y2 = 0.5 + MU*1.01*sin(angle);
+            x2 = 0.99 * LAMBDA * cos(angle);
+            y2 = 0.99 * LAMBDA * sin(angle);
             linex[i] = x2;
             liney[i] = y2;
-            distance[i-1] = module2(x2-x1,y2-y1);
+            distance[i - 1] = module2(x2 - x1, y2 - y1);
             x1 = x2;
             y1 = y2;
         }
-        distance[N_FIELD_LINES*FIELD_LINE_FACTOR - 1] = module2(x2- 0.99*LAMBDA,y2);
-//         distance[N_FIELD_LINES*FIELD_LINE_FACTOR - 1] = module2(x2-LAMBDA,y2-0.5);
+        distance[N_FIELD_LINES * FIELD_LINE_FACTOR - 1] = module2(x2 - 0.99 * LAMBDA, y2);
+        //         distance[N_FIELD_LINES*FIELD_LINE_FACTOR - 1] = module2(x2-LAMBDA,y2-0.5);
     }
 
-    dx = (XMAX-XMIN)/((double)NX);
+    dx = (XMAX - XMIN) / ((double)NX);
     glBegin(GL_QUADS);
 
-    for (i=0; i<NX; i++)
-        for (j=0; j<NY; j++)
+    for (i = 0; i < NX; i++)
+        for (j = 0; j < NY; j++)
         {
-            if (FIELD_REP == F_INTENSITY) value = phi[i][j];
+            if (FIELD_REP == F_INTENSITY)
+                value = phi[i][j];
             else if (FIELD_REP == F_GRADIENT)
             {
                 value = module2(nablax[i][j], nablay[i][j]);
             }
-            
-            if (xy_in[i][j] == 1) 
+
+            if (xy_in[i][j] == 1)
             {
                 color_scheme(COLOR_SCHEME, value, scale, time, rgb);
                 glColor3f(rgb[0], rgb[1], rgb[2]);
             }
-            else glColor3f(0.0, 0.0, 0.0);
+            else
+                glColor3f(0.0, 0.0, 0.0);
 
             glVertex2i(i, j);
-            glVertex2i(i+1, j);
-            glVertex2i(i+1, j+1);
-            glVertex2i(i, j+1);
+            glVertex2i(i + 1, j);
+            glVertex2i(i + 1, j + 1);
+            glVertex2i(i, j + 1);
         }
-    glEnd ();
-        
+    glEnd();
+
     /* draw a field line */
     if (DRAW_FIELD_LINES)
     {
         /* compute gradient norm along boundary and its integral */
-        for (i = 0; i < N_FIELD_LINES*FIELD_LINE_FACTOR; i++)
+        for (i = 0; i < N_FIELD_LINES * FIELD_LINE_FACTOR; i++)
         {
             xy_to_ij(linex[i], liney[i], ij);
-            intens = module2(nablax[ij[0]][ij[1]], nablay[ij[0]][ij[1]])*distance[i];
-            if (i > 0) integral[i] = integral[i-1] + intens;
-            else integral[i] = intens;
+            intens = module2(nablax[ij[0]][ij[1]], nablay[ij[0]][ij[1]]) * distance[i];
+            if (i > 0)
+                integral[i] = integral[i - 1] + intens;
+            else
+                integral[i] = intens;
         }
-        deltaintens = integral[N_FIELD_LINES*FIELD_LINE_FACTOR-1]/((double)N_FIELD_LINES);
-        
-//         printf("delta = %.5lg\n", deltaintens);
-        
+        deltaintens = integral[N_FIELD_LINES * FIELD_LINE_FACTOR - 1] / ((double)N_FIELD_LINES);
+
+        //         printf("delta = %.5lg\n", deltaintens);
+
         i = 0;
         draw_field_line(linex[0], liney[0], xy_in, nablax, nablay, 0.00002, 100000);
-        for (j = 1; j < N_FIELD_LINES+1; j++)
+        for (j = 1; j < N_FIELD_LINES + 1; j++)
         {
-            while ((integral[i] <= j*deltaintens)&&(i < N_FIELD_LINES*FIELD_LINE_FACTOR)) i++; 
+            while ((integral[i] <= j * deltaintens) && (i < N_FIELD_LINES * FIELD_LINE_FACTOR))
+                i++;
             draw_field_line(linex[i], liney[i], xy_in, nablax, nablay, 0.00002, 100000);
             counter++;
         }
         printf("%i lines\n", counter);
     }
 
-    
-    for (i=0; i<NX; i++)
+    for (i = 0; i < NX; i++)
     {
         free(nablax[i]);
         free(nablay[i]);
     }
 }
 
-
-
 void evolve_wave_half(double *phi_in[NX], double *phi_out[NX], short int *xy_in[NX])
 /* time step of field evolution */
 {
     int i, j, iplus, iminus, jplus, jminus;
     double delta1, delta2, x, y;
-    
-    #pragma omp parallel for private(i,j,iplus,iminus,jplus,jminus,delta1,delta2,x,y)
-    for (i=0; i<NX; i++){
-        for (j=0; j<NY; j++){
-            if (xy_in[i][j] == 1){
+
+#pragma omp parallel for private(i, j, iplus, iminus, jplus, jminus, delta1, delta2, x, y)
+    for (i = 0; i < NX; i++)
+    {
+        for (j = 0; j < NY; j++)
+        {
+            if (xy_in[i][j] == 1)
+            {
                 /* discretized Laplacian depending on boundary conditions */
-                if ((B_COND == BC_DIRICHLET)||(B_COND == BC_ABSORBING))
+                if ((B_COND == BC_DIRICHLET) || (B_COND == BC_ABSORBING))
                 {
-                    iplus = (i+1);   if (iplus == NX) iplus = NX-1;
-                    iminus = (i-1);  if (iminus == -1) iminus = 0;
-                    jplus = (j+1);   if (jplus == NY) jplus = NY-1;
-                    jminus = (j-1);  if (jminus == -1) jminus = 0;
+                    iplus = (i + 1);
+                    if (iplus == NX)
+                        iplus = NX - 1;
+                    iminus = (i - 1);
+                    if (iminus == -1)
+                        iminus = 0;
+                    jplus = (j + 1);
+                    if (jplus == NY)
+                        jplus = NY - 1;
+                    jminus = (j - 1);
+                    if (jminus == -1)
+                        jminus = 0;
                 }
                 else if (B_COND == BC_PERIODIC)
                 {
-                    iplus = (i+1) % NX;
-                    iminus = (i-1) % NX;
-                    if (iminus < 0) iminus += NX;
-                    jplus = (j+1) % NY;
-                    jminus = (j-1) % NY;
-                    if (jminus < 0) jminus += NY;
+                    iplus = (i + 1) % NX;
+                    iminus = (i - 1) % NX;
+                    if (iminus < 0)
+                        iminus += NX;
+                    jplus = (j + 1) % NY;
+                    jminus = (j - 1) % NY;
+                    if (jminus < 0)
+                        jminus += NY;
                 }
-                
-                delta1 = phi_in[iplus][j] + phi_in[iminus][j] + phi_in[i][jplus] + phi_in[i][jminus] - 4.0*phi_in[i][j];
+
+                delta1 = phi_in[iplus][j] + phi_in[iminus][j] + phi_in[i][jplus] + phi_in[i][jminus] - 4.0 * phi_in[i][j];
 
                 x = phi_in[i][j];
 
                 /* evolve phi */
                 if (B_COND != BC_ABSORBING)
                 {
-                    phi_out[i][j] = x + intstep*(delta1 - SPEED*(phi_in[iplus][j] - phi_in[i][j]));
+                    phi_out[i][j] = x + intstep * (delta1 - SPEED * (phi_in[iplus][j] - phi_in[i][j]));
                 }
-                else        /* case of absorbing b.c. - this is only an approximation of correct way of implementing */
+                else /* case of absorbing b.c. - this is only an approximation of correct way of implementing */
                 {
                     /* in the bulk */
-                    if ((i>0)&&(i<NX-1)&&(j>0)&&(j<NY-1))
+                    if ((i > 0) && (i < NX - 1) && (j > 0) && (j < NY - 1))
                     {
-                        phi_out[i][j] = x - intstep*delta2;
+                        phi_out[i][j] = x - intstep * delta2;
                     }
-                     /* right border */
-                    else if (i==NX-1) 
+                    /* right border */
+                    else if (i == NX - 1)
                     {
-                        phi_out[i][j] = x - intstep1*(x - phi_in[i-1][j]);
+                        phi_out[i][j] = x - intstep1 * (x - phi_in[i - 1][j]);
                     }
                     /* upper border */
-                    else if (j==NY-1) 
+                    else if (j == NY - 1)
                     {
-                        phi_out[i][j] = x - intstep1*(x - phi_in[i][j-1]);
+                        phi_out[i][j] = x - intstep1 * (x - phi_in[i][j - 1]);
                     }
                     /* left border */
-                    else if (i==0) 
+                    else if (i == 0)
                     {
-                        phi_out[i][j] = x - intstep1*(x - phi_in[1][j]);
+                        phi_out[i][j] = x - intstep1 * (x - phi_in[1][j]);
                     }
-                   /* lower border */
-                    else if (j==0) 
+                    /* lower border */
+                    else if (j == 0)
                     {
-                        phi_out[i][j] = x - intstep1*(x - phi_in[i][1]);
+                        phi_out[i][j] = x - intstep1 * (x - phi_in[i][1]);
                     }
                 }
-
 
                 if (FLOOR)
                 {
-                    if (phi_out[i][j] > VMAX) phi_out[i][j] = VMAX;
-                    if (phi_out[i][j] < -VMAX) phi_out[i][j] = -VMAX;
+                    if (phi_out[i][j] > VMAX)
+                        phi_out[i][j] = VMAX;
+                    if (phi_out[i][j] < -VMAX)
+                        phi_out[i][j] = -VMAX;
                 }
             }
         }
     }
-    
-//     printf("phi(0,0) = %.3lg, psi(0,0) = %.3lg\n", phi[NX/2][NY/2], psi[NX/2][NY/2]);
+
+    //     printf("phi(0,0) = %.3lg, psi(0,0) = %.3lg\n", phi[NX/2][NY/2], psi[NX/2][NY/2]);
 }
 
 void evolve_wave(double *phi[NX], double *phi_tmp[NX], short int *xy_in[NX])
@@ -521,42 +551,40 @@ void evolve_wave(double *phi[NX], double *phi_tmp[NX], short int *xy_in[NX])
     evolve_wave_half(phi_tmp, phi, xy_in);
 }
 
-
-
-
-double compute_variance(double *phi[NX], short int * xy_in[NX])
+double compute_variance(double *phi[NX], short int *xy_in[NX])
 /* compute the variance (total probability) of the field */
 {
     int i, j, n = 0;
     double variance = 0.0;
 
-    for (i=1; i<NX; i++)
-        for (j=1; j<NY; j++)
+    for (i = 1; i < NX; i++)
+        for (j = 1; j < NY; j++)
         {
             if (xy_in[i][j])
             {
                 n++;
-                variance += phi[i][j]*phi[i][j];
+                variance += phi[i][j] * phi[i][j];
             }
         }
-    if (n==0) n=1;
-    return(variance/(double)n);
+    if (n == 0)
+        n = 1;
+    return (variance / (double)n);
 }
 
-void renormalise_field(double *phi[NX], short int * xy_in[NX], double variance)
+void renormalise_field(double *phi[NX], short int *xy_in[NX], double variance)
 /* renormalise variance of field */
 {
     int i, j;
     double stdv;
-    
+
     stdv = sqrt(variance);
 
-    for (i=1; i<NX; i++)
-        for (j=1; j<NY; j++)
+    for (i = 1; i < NX; i++)
+        for (j = 1; j < NY; j++)
         {
             if (xy_in[i][j])
             {
-                phi[i][j] = phi[i][j]/stdv;
+                phi[i][j] = phi[i][j] / stdv;
             }
         }
 }
@@ -565,22 +593,23 @@ void print_level(int level)
 {
     double pos[2];
     char message[50];
-    
+
     glColor3f(1.0, 1.0, 1.0);
     sprintf(message, "Level %i", level);
     xy_to_pos(XMIN + 0.1, YMAX - 0.2, pos);
     write_text(pos[0], pos[1], message);
 }
 
-
 void print_Julia_parameters()
 {
     double pos[2];
     char message[50];
-    
+
     glColor3f(1.0, 1.0, 1.0);
-    if (julia_y >= 0.0) sprintf(message, "c = %.5f + %.5f i", julia_x, julia_y);
-    else sprintf(message, "c = %.5f %.5f i", julia_x, julia_y);
+    if (julia_y >= 0.0)
+        sprintf(message, "c = %.5f + %.5f i", julia_x, julia_y);
+    else
+        sprintf(message, "c = %.5f %.5f i", julia_x, julia_y);
     xy_to_pos(XMIN + 0.1, YMAX - 0.2, pos);
     write_text(pos[0], pos[1], message);
 }
@@ -589,16 +618,16 @@ void set_Julia_parameters(int time, double *phi[NX], short int *xy_in[NX])
 {
     double jangle, cosj, sinj, radius = 0.15;
 
-    jangle = (double)time*DPI/(double)NSTEPS;
-//     jangle = (double)time*0.001;
-//     jangle = (double)time*0.0001;
+    jangle = (double)time * DPI / (double)NSTEPS;
+    //     jangle = (double)time*0.001;
+    //     jangle = (double)time*0.0001;
 
     cosj = cos(jangle);
     sinj = sin(jangle);
-    julia_x = -0.9 + radius*cosj;
-    julia_y = radius*sinj;
+    julia_x = -0.9 + radius * cosj;
+    julia_y = radius * sinj;
     init_julia_set(phi, xy_in);
-    
+
     printf("Julia set parameters : i = %i, angle = %.5lg, cx = %.5lg, cy = %.5lg \n", time, jangle, julia_x, julia_y);
 }
 
@@ -606,21 +635,21 @@ void set_Julia_parameters_cardioid(int time, double *phi[NX], short int *xy_in[N
 {
     double jangle, cosj, sinj, yshift;
 
-    jangle = pow(1.05 + (double)time*0.00003, 0.333);
-    yshift = 0.02*sin((double)time*PID*0.002);
-//     jangle = pow(1.0 + (double)time*0.00003, 0.333);
-//     jangle = pow(0.05 + (double)time*0.00003, 0.333);
-//     jangle = pow(0.1 + (double)time*0.00001, 0.333);
-//     yshift = 0.04*sin((double)time*PID*0.002);
+    jangle = pow(1.05 + (double)time * 0.00003, 0.333);
+    yshift = 0.02 * sin((double)time * PID * 0.002);
+    //     jangle = pow(1.0 + (double)time*0.00003, 0.333);
+    //     jangle = pow(0.05 + (double)time*0.00003, 0.333);
+    //     jangle = pow(0.1 + (double)time*0.00001, 0.333);
+    //     yshift = 0.04*sin((double)time*PID*0.002);
 
     cosj = cos(jangle);
     sinj = sin(jangle);
-    julia_x = 0.5*(cosj*(1.0 - 0.5*cosj) + 0.5*sinj*sinj);
-    julia_y = 0.5*sinj*(1.0-cosj) + yshift;
-//     julia_x = 0.5*(cosj*(1.0 - 0.5*cosj) + 0.5*sinj*sinj);
-//     julia_y = 0.5*sinj*(1.0-cosj);
+    julia_x = 0.5 * (cosj * (1.0 - 0.5 * cosj) + 0.5 * sinj * sinj);
+    julia_y = 0.5 * sinj * (1.0 - cosj) + yshift;
+    //     julia_x = 0.5*(cosj*(1.0 - 0.5*cosj) + 0.5*sinj*sinj);
+    //     julia_y = 0.5*sinj*(1.0-cosj);
     init_julia_set(phi, xy_in);
-    
+
     printf("Julia set parameters : i = %i, angle = %.5lg, cx = %.5lg, cy = %.5lg \n", time, jangle, julia_x, julia_y);
 }
 
@@ -632,31 +661,32 @@ void animation()
     int i, j, s;
 
     /* Since NX and NY are big, it seemed wiser to use some memory allocation here */
-    for (i=0; i<NX; i++)
+    for (i = 0; i < NX; i++)
     {
-        phi[i] = (double *)malloc(NY*sizeof(double));
-        phi_tmp[i] = (double *)malloc(NY*sizeof(double));
-        xy_in[i] = (short int *)malloc(NY*sizeof(short int));
+        phi[i] = (double *)malloc(NY * sizeof(double));
+        phi_tmp[i] = (double *)malloc(NY * sizeof(double));
+        xy_in[i] = (short int *)malloc(NY * sizeof(short int));
     }
 
     npolyline = init_polyline(MDEPTH, polyline);
-    for (i=0; i<npolyline; i++) printf("vertex %i: (%.3f, %.3f)\n", i, polyline[i].x, polyline[i].y);
+    for (i = 0; i < npolyline; i++)
+        printf("vertex %i: (%.3f, %.3f)\n", i, polyline[i].x, polyline[i].y);
 
-    dx = (XMAX-XMIN)/((double)NX);
-    intstep = DT/(dx*dx*VISCOSITY);
-    intstep1 = DT/(dx*VISCOSITY);
-    
-//     julia_x = 0.1; 
-//     julia_y = 0.6; 
-    
-//     set_Julia_parameters(0, phi, xy_in);
-    
+    dx = (XMAX - XMIN) / ((double)NX);
+    intstep = DT / (dx * dx * VISCOSITY);
+    intstep1 = DT / (dx * VISCOSITY);
+
+    //     julia_x = 0.1;
+    //     julia_y = 0.6;
+
+    //     set_Julia_parameters(0, phi, xy_in);
+
     printf("Integration step %.3lg\n", intstep);
 
     /* initialize wave wave function */
     init_gaussian(-1.0, 0.0, 0.1, 0.0, 0.01, phi, xy_in);
-//     init_gaussian(x, y, mean, amplitude, scalex, phi, xy_in)
-    
+    //     init_gaussian(x, y, mean, amplitude, scalex, phi, xy_in)
+
     if (SCALE)
     {
         var = compute_variance(phi, xy_in);
@@ -666,22 +696,24 @@ void animation()
 
     blank();
     glColor3f(0.0, 0.0, 0.0);
-    
 
     glutSwapBuffers();
-    
+
     draw_wave(phi, xy_in, 1.0, 0);
-    if (DRAW_BILLIARD) draw_billiard();
-//     print_Julia_parameters(i);
-    
-//     print_level(MDEPTH);
+    if (DRAW_BILLIARD)
+        draw_billiard();
+    //     print_Julia_parameters(i);
+
+    //     print_level(MDEPTH);
 
     glutSwapBuffers();
 
     sleep(SLEEP1);
-    if (MOVIE) for (i=0; i<SLEEP1*25; i++) save_frame();
+    if (MOVIE)
+        for (i = 0; i < SLEEP1 * 25; i++)
+            save_frame();
 
-    for (i=0; i<=NSTEPS; i++)
+    for (i = 0; i <= NSTEPS; i++)
     {
         /* compute the variance of the field to adjust color scheme */
         /* the color depends on the field divided by sqrt(1 + variance) */
@@ -689,26 +721,29 @@ void animation()
         {
             var = compute_variance(phi, xy_in);
             scale = sqrt(1.0 + var);
-//             printf("Norm: %5lg\t Scaling factor: %5lg\n", var, scale);
+            //             printf("Norm: %5lg\t Scaling factor: %5lg\n", var, scale);
             renormalise_field(phi, xy_in, var);
         }
-        else scale = 1.0;
-        
+        else
+            scale = 1.0;
+
         draw_wave(phi, xy_in, scale, i);
-        
-        for (j=0; j<NVID; j++) evolve_wave(phi, phi_tmp, xy_in);
 
-        if (DRAW_BILLIARD) draw_billiard();
-        
-//         print_level(MDEPTH);
-//         print_Julia_parameters(i);
+        for (j = 0; j < NVID; j++)
+            evolve_wave(phi, phi_tmp, xy_in);
 
-	glutSwapBuffers();
-        
+        if (DRAW_BILLIARD)
+            draw_billiard();
+
+        //         print_level(MDEPTH);
+        //         print_Julia_parameters(i);
+
+        glutSwapBuffers();
+
         /* modify Julia set */
-//         set_Julia_parameters(i, phi, xy_in);
+        //         set_Julia_parameters(i, phi, xy_in);
 
-	if (MOVIE)
+        if (MOVIE)
         {
             save_frame();
 
@@ -721,22 +756,20 @@ void animation()
                 s = system("mv wave*.tif tif_heat/");
             }
         }
-
     }
 
     if (MOVIE)
     {
-        for (i=0; i<20; i++) save_frame();
+        for (i = 0; i < 20; i++)
+            save_frame();
         s = system("mv wave*.tif tif_heat/");
     }
-    for (i=0; i<NX; i++)
+    for (i = 0; i < NX; i++)
     {
         free(phi[i]);
         free(phi_tmp[i]);
     }
-
 }
-
 
 void display(void)
 {
@@ -753,15 +786,13 @@ void display(void)
     glPopMatrix();
 
     glutDestroyWindow(glutGetWindow());
-
 }
 
-
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(WINWIDTH,WINHEIGHT);
+    glutInitWindowSize(WINWIDTH, WINHEIGHT);
     glutCreateWindow("Heat equation in a planar domain");
 
     init();
@@ -772,4 +803,3 @@ int main(int argc, char** argv)
 
     return 0;
 }
-
