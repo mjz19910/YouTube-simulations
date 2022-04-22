@@ -628,6 +628,7 @@ void init_particle_config(t_particle particles[NMAXCIRCLES])
     case (C_POISSON_DISC):
     {
         printf("Generating Poisson disc sample\n");
+        printf("Gen disc lj");
         /* generate first circle */
         //             particles[0].xc = LAMBDA*(2.0*(double)rand()/RAND_MAX - 1.0);
         particles[0].xc = (INITXMAX - INITXMIN) * (double)rand() / RAND_MAX + INITXMIN;

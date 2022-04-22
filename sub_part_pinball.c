@@ -1,3 +1,4 @@
+#include <time.h>
 /* global variables needed for circle configuration with periodic boundary conditions */
 
 // short int double_circle[NMAXCIRCLES];   /* set to 1 if a circle is a translate of another one on the boundary */
@@ -268,6 +269,7 @@ void init_circles_pinball(int circle_pattern, t_circle circles[NMAXCIRCLES])
     }
     case (C_POISSON_DISC):
     {
+        srand(time(NULL));
         printf("Generating Poisson disc sample\n");
         /* generate first circle */
         circles[0].xc = LAMBDA * (2.0 * (double)rand() / RAND_MAX - 1.0);

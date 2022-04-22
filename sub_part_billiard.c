@@ -5689,8 +5689,11 @@ void init_circles(t_circle circles[NMAXCIRCLES])
     case (C_POISSON_DISC):
     {
         printf("Generating Poisson disc sample\n");
+        printf("Gen disc part_bil");
         /* generate first circle */
-        circles[0].xc = LAMBDA * (2.0 * (double)rand() / RAND_MAX - 1.0);
+        int rand_1 = rand();
+        printf("Circle rand xc %.3f\n", (double)rand_1);
+        circles[0].xc = LAMBDA * (2.0 * (double)rand_1 / RAND_MAX - 1.0);
         circles[0].yc = (YMAX - YMIN) * (double)rand() / RAND_MAX + YMIN;
         active_poisson[0] = 1;
         n_p_active = 1;
@@ -5698,8 +5701,10 @@ void init_circles(t_circle circles[NMAXCIRCLES])
 
         while ((n_p_active > 0) && (ncircles < NMAXCIRCLES))
         {
+            rand_1 = rand();
+            printf("Circle rand xc %.3f\n", (double)rand_1);
             /* randomly select an active circle */
-            i = rand() % (ncircles);
+            i = rand_1 % (ncircles);
             while (!active_poisson[i])
                 i = rand() % (ncircles);
             //                 printf("Starting from circle %i at (%.3f,%.3f)\n", i, circlex[i], circley[i]);

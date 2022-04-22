@@ -865,6 +865,8 @@ void display(void)
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
+
     glutInit(&argc, argv);
     if (SHOWTRAILS)
         glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH);
