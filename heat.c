@@ -790,21 +790,21 @@ void display(void)
 
 int main(int argc, char **argv)
 {
-    printf("1");
+    printf("1\n");
     glutInit(&argc, argv);
-    printf("1");
+    printf("1\n");
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    printf("1");
+    printf("1\n");
     glutInitWindowSize(WINWIDTH, WINHEIGHT);
-    printf("1");
+    printf("1\n");
     glutCreateWindow("Heat equation in a planar domain");
-    printf("1");
+    printf("1\n");
 
     init();
-    printf("1");
+    printf("1\n");
 
     glutDisplayFunc(display);
-    printf("glutMainLoop");
+    printf("glutMainLoop\n");
 
     glutMainLoop();
 

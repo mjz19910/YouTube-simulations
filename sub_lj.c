@@ -2,7 +2,6 @@
 /* Graphics routines */
 /*********************/
 #include <GL/glut.h>
-#include <math.h>
 #include "tiffio.h"
 #include "colors_waves.c"
 #define PI M_PI
